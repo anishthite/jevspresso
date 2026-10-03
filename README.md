@@ -1,8 +1,12 @@
+<img src="public/favicon.svg" alt="Stately" width="48" />
+
 # ☕ Jevspresso
 
 A simulated espresso bar where every barista decision is made by jev, [TypeSafe](https://typesafe.ai)'s System One model. Type an order in plain English ("a cap but with almond milk"), and watch jev grind, tamp, pull shots, steam milk, and serve. You can work the bar too, or break the equipment and see how jev copes.
 
 **Live demo:** <https://jevspresso.davidkpiano.workers.dev>
+
+https://github.com/user-attachments/assets/d95ad69a-1e04-4f4d-b79e-313af55c6a3b
 
 ## Motivation
 
@@ -70,6 +74,11 @@ actor.send({ type: 'user.request', text: 'time to sleep' });              // →
 `client` sends jev's request to the TypeSafe SDK's `systemOne()` on your server, so the API key stays there. [`src/lib/jev.ts`](src/lib/jev.ts) is the bar's client.
 
 ## How it works
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/how-it-works-dark.png" />
+  <img src="docs/how-it-works-light.png" alt="Sequence diagram: the customer orders; the bar asks jev to parse it; whenever the bar changes, the barista agent lists the moves can() accepts, asks jev which one, and sends it to the bar only if still possible; the bar serves the customer." />
+</picture>
 
 - **The bar** ([`src/machines/espressoBar.ts`](src/machines/espressoBar.ts)) is one parallel machine: order intake, the grinder, espresso machine and steam wand, one portafilter, one milk pitcher, and each barista's hands. It models physics, not recipes. Mistakes are possible; recipes are data the cups are compared against.
 - **The barista** is a `createJevLogic` agent invoked at the top of the bar. Whenever the bar changes, it offers jev every `barista.*` event that `can()` accepts, each described in the machine's own words plus what it would change (computed with the pure `transition()`). jev picks one, and the agent sends it if the bar still accepts it.
