@@ -1,5 +1,3 @@
-<img src="public/favicon.svg" alt="Stately" width="48" />
-
 # ☕ Jevspresso
 
 A simulated espresso bar where every barista decision is made by jev, [TypeSafe](https://typesafe.ai)'s System One model. Type an order in plain English ("a cap but with almond milk"), and watch jev grind, tamp, pull shots, steam milk, and serve. You can work the bar too, or break the equipment and see how jev copes.
