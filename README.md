@@ -2,7 +2,7 @@
 
 A simulated espresso bar where every barista decision is made by jev, [TypeSafe](https://typesafe.ai)'s System One model. Type an order in plain English ("a cap but with almond milk"), and watch jev grind, tamp, pull shots, steam milk, and serve. You can work the bar too, or break the equipment and see how jev copes.
 
-**Live demo:** <https://jevspresso.davidkpiano.workers.dev>
+**Live demo:** <https://jevspresso.dev>
 
 https://github.com/user-attachments/assets/d95ad69a-1e04-4f4d-b79e-313af55c6a3b
 
