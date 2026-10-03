@@ -39,7 +39,7 @@ async function loadInspection() {
     import('../machines/espressoBar.ts?raw'),
     import('../../packages/jev/src/runtime.ts?raw'),
   ]);
-  // The barista and the order router are jev agents: one machine, `jev`.
+  // The barista and the order router are Jev agents: one machine, `jev`.
   const sources: MachineSources = { espressoBar: bar.default, jev: jev.default };
   return { createInspector, sources };
 }
