@@ -1,0 +1,133 @@
+@import 'tailwindcss';
+@import './styles/motion.css';
+
+@theme {
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+}
+
+html,
+body {
+  background: #141413;
+  font-family: var(--font-sans);
+}
+
+/* Minimal scrollbars everywhere: a thin thumb, no track. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3a3936 transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: #3a3936 padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #6b6862;
+}
+
+/* Amendment 1: no monospace anywhere. Numbers that tick or count get
+   tabular figures instead, so columns stay steady without a mono face. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* A countdown: tabular figures in a fixed-width slot, so "9.9s" and "10.0s"
+   take the same room and nothing beside them moves as the time ticks. */
+.secs {
+  display: inline-block;
+  min-width: 4.6ch;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Amendment 3: two-line clamp where the full meaning matters (decision
+   reasons); everything else truncates to one line. */
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* View transitions move only named elements (a served cup flying to its order
+   card); the rest of the page stays live and clickable underneath. */
+:root {
+  view-transition-name: none;
+}
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-group(*) {
+  animation-duration: 700ms;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* An ingredient's stock as a slider: the track filled to how much there is,
+   in the ingredient's colour; the thumb shows on hover or focus. */
+.m-range {
+  appearance: none;
+  width: 100%;
+  height: 14px;
+  background: transparent;
+  cursor: pointer;
+}
+.m-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--fill-color) var(--fill), #2a2a28 var(--fill));
+}
+.m-range::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--fill-color) var(--fill), #2a2a28 var(--fill));
+}
+.m-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  border-radius: 999px;
+  background: #faf9f5;
+  opacity: 0;
+  transition: opacity var(--duration-fast, 150ms);
+}
+.m-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 999px;
+  background: #faf9f5;
+  opacity: 0;
+  transition: opacity var(--duration-fast, 150ms);
+}
+.m-range:hover::-webkit-slider-thumb,
+.m-range:focus-visible::-webkit-slider-thumb,
+.m-range:active::-webkit-slider-thumb,
+.m-range:hover::-moz-range-thumb,
+.m-range:focus-visible::-moz-range-thumb,
+.m-range:active::-moz-range-thumb {
+  opacity: 1;
+}
+.m-range:focus-visible {
+  outline: 2px solid #faf9f5;
+  outline-offset: 2px;
+  border-radius: 4px;
+}

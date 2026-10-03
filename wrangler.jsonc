@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jevspresso",
+  // The Stately account; not a secret. CI deploys here (.github/workflows/deploy.yml).
+  "account_id": "6f65ec4405c3758651173521d7b8530e",
+  "compatibility_date": "2025-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  "assets": { "directory": "./dist/client" },
+  "observability": { "enabled": true }
+  // No TYPESAFE_API_KEY on the deployed worker: visitors give their own key on the page.
+}

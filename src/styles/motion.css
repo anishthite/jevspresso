@@ -1,0 +1,699 @@
+/* transitions-dev — copy this :root block into your project once.
+   Every transition snippet reads from these semantic names. */
+:root {
+  /* ── Motion tokens — shared scale ──────────────────────────────
+     Reference these with var(--…) anywhere in your project. The
+     transitions below ship literal values so each snippet works on
+     its own; `transitions refine` maps hardcoded values back to
+     these tokens. */
+  /* Durations */
+  --duration-stagger: 40ms;  /* per-item stagger offset */
+  --duration-micro: 80ms;  /* tooltip/path delay, shake segment, large stagger */
+  --duration-quick: 150ms;  /* modal/dropdown close, text swap, tooltip appear */
+  --duration-fast: 250ms;  /* icon swap, dropdown/modal open, tabs sliding, page slide */
+  --duration-medium: 350ms;  /* panel close, toast close */
+  --duration-slow: 400ms;  /* panel open, skeleton content reveal, input clear */
+  --duration-very-slow: 500ms;  /* emphasis moments, badge appear, text reveal, success check */
+  /* Easings */
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);  /* modal/dropdown/panel open + close, page slide, resize, position change */
+  --ease-in-out: ease-in-out;  /* icon swap, text swap, text reveal, skeleton reveal */
+  --ease-out: ease-out;  /* tooltip open / close */
+  --ease-linear: linear;  /* shimmer, skeleton pulse, spinner */
+  --ease-bounce: cubic-bezier(0.34, 1.36, 0.64, 1);  /* badge pop open */
+  --ease-bounce-strong: cubic-bezier(0.34, 3.85, 0.64, 1);  /* bouncy hover-out (avatar return) */
+  /* Distances */
+  --distance-micro: 4px;  /* text swap */
+  --distance-small: 6px;  /* error shake (small segment) */
+  --distance-base: 8px;  /* badge diagonal reveal, page slide, error shake (large segment) */
+  --distance-medium: 12px;  /* text reveal */
+  --distance-large: 30px;  /* check badge appear */
+  /* Scales */
+  --scale-large: 0.96;  /* modal open / close */
+  --scale-medium: 0.97;  /* dropdown open */
+  --scale-small: 0.98;  /* tooltip open */
+  --scale-tiny: 0.99;  /* dropdown close */
+  /* Blur */
+  --blur-small: 2px;  /* panel reveal, icon swap, text swap, skeleton reveal, number pop-in */
+  --blur-medium: 3px;  /* page slide, text reveal */
+  --blur-large: 8px;  /* success check open */
+
+  /* Card resize */
+  --resize-dur: 300ms;
+  --resize-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Number pop-in */
+  --digit-dur: 500ms;
+  --digit-distance: 8px;
+  --digit-stagger: 70ms;
+  --digit-blur: 2px;
+  --digit-ease: cubic-bezier(0.34, 1.45, 0.64, 1);
+  --digit-dir-x: 0;
+  --digit-dir-y: 1;
+  /* Notification badge */
+  --badge-slide-dur: 260ms;
+  --badge-pop-dur: 500ms;
+  --badge-pop-close-dur: 180ms;
+  --badge-fade-dur: 400ms;
+  --badge-fade-close-dur: 180ms;
+  --badge-blur: 2px;
+  --badge-offset-x: -8.2px;
+  --badge-offset-y: 12.4px;
+  --badge-slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --badge-pop-ease: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --badge-close-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Text states swap */
+  --text-swap-dur: 150ms;
+  --text-swap-translate-y: 4px;
+  --text-swap-blur: 2px;
+  --text-swap-ease: ease-in-out;
+  /* Menu dropdown */
+  --dropdown-open-dur: 250ms;
+  --dropdown-close-dur: 150ms;
+  --dropdown-pre-scale: 0.97;
+  --dropdown-closing-scale: 0.99;
+  --dropdown-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Modal open / close */
+  --modal-open-dur: 250ms;
+  --modal-close-dur: 150ms;
+  --modal-scale: 0.96;
+  --modal-scale-close: 0.96;
+  --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Panel reveal */
+  --panel-open-dur: 400ms;
+  --panel-close-dur: 350ms;
+  --panel-translate-y: 100px;
+  --panel-blur: 2px;
+  --panel-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Page side-by-side */
+  --page-slide-dur: 250ms;
+  --page-fade-dur: 250ms;
+  --page-slide-distance: 8px;
+  --page-blur: 3px;
+  --page-stagger: 0ms;
+  --page-exit-enabled: 1;
+  --page-slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --page-fade-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Icon swap */
+  --icon-swap-dur: 250ms;
+  --icon-swap-blur: 2px;
+  --icon-swap-start-scale: 0.25;
+  --icon-swap-ease: ease-in-out;
+  /* Success check */
+  --check-opacity-dur: 500ms;
+  --check-rotate-dur: 500ms;
+  --check-rotate-from: 80deg;
+  --check-bob-dur: 500ms;
+  --check-y-amount: 40px;
+  --check-blur-dur: 500ms;
+  --check-blur-from: 10px;
+  --check-path-dur: 500ms;
+  --check-path-delay: 80ms;
+  --check-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --check-ease-opacity: cubic-bezier(0.22, 1, 0.36, 1);
+  --check-ease-rotate: cubic-bezier(0.22, 1, 0.36, 1);
+  --check-ease-bob: cubic-bezier(0.34, 1.35, 0.64, 1);
+  --check-ease-path: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Avatar group hover */
+  --avatar-lift: -4px;
+  --avatar-dur: 320ms;
+  --avatar-scale: 1.05;
+  --avatar-falloff: 0.45;
+  --avatar-ease-in: cubic-bezier(0.22, 1, 0.36, 1);
+  --avatar-ease-out: cubic-bezier(0.34, 3.85, 0.64, 1);
+  /* Error state shake */
+  --shake-distance: 6px;
+  --shake-overshoot: 4px;
+  --shake-dur-a: 80ms;
+  --shake-dur-b: 60ms;
+  --shake-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --revert-hold: 3000ms;
+  --revert-dur: 280ms;
+  /* Input clear with dissolve */
+  --clear-dur: 1000ms;
+  --clear-out-dur: 400ms;
+  --clear-in-dur: 400ms;
+  --clear-out-fly: 12px;
+  --clear-in-fly: 12px;
+  --clear-out-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --clear-in-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --clear-blur: 2px;
+  --glow-delay: 50ms;
+  --glow-peak-at: 0.15;
+  --glow-opacity: 0.42;
+  --glow-spread: 1.5;
+  /* Skeleton loader and reveal */
+  --pulse-dur: 1000ms;
+  --pulse-count: 1;
+  --pulse-min: 0.5;
+  --reveal-dur: 400ms;
+  --reveal-blur: 2px;
+  --reveal-ease: ease-in-out;
+  /* Shimmer text */
+  --shimmer-dur: 2000ms;
+  --shimmer-base: #7c7c7c;
+  --shimmer-highlight: #0d0d0d;
+  --shimmer-band: 400%;
+  --shimmer-ease: linear;
+  /* Tabs sliding */
+  --tabs-dur: 250ms;
+  --tabs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tabs-text-muted: rgba(15, 15, 15, 0.8);
+  --tabs-text-active: #0f0f0f;
+  --tabs-bar-bg: #f1f1f1;
+  --tabs-pill-bg: #ffffff;
+  /* Tooltip open/close */
+  --tt-in-dur: 150ms;
+  --tt-out-dur: 50ms;
+  --tt-scale: 0.98;
+  --tt-delay: 80ms;
+  --tt-in-ease: ease-out;
+  --tt-out-ease: ease-out;
+  --tt-move-dur: 160ms;
+  --tt-move-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tt-bg: #ffffff;
+  --tt-fg: #2f2f2f;
+  /* Texts reveal */
+  --stagger-dur: 500ms;
+  --stagger-distance: 12px;
+  --stagger-stagger: 40ms;
+  --stagger-blur: 3px;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Card hover tilt */
+  --tilt-perspective: 1000px;
+  --tilt-return: 1000ms;
+  --tilt-return-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tilt-follow: 400ms;
+  --tilt-follow-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tilt-glare-opacity: 0.32;
+  --tilt-glare-fade: 300ms;
+  --tilt-glare-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Plus to menu morph */
+  --morph-open-dur: 350ms;
+  --morph-close-dur: 250ms;
+  --morph-ease: cubic-bezier(0.34, 1.25, 0.64, 1);
+  --morph-close-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --morph-r-closed: 40px;
+  --morph-r-open: 20px;
+  --morph-fade-dur: 200ms;
+  --morph-slide: 40px;
+  --morph-rotate: 45deg;
+  --morph-scale: 0.97;
+  --morph-blur: 2px;
+  /* Accordion expand */
+  --acc-expand: 250ms;
+  --acc-collapse: 250ms;
+  --acc-chevron: 250ms;
+  --acc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Toast open / close */
+  --toast-open: 350ms;
+  --toast-close: 250ms;
+  --toast-distance: 16px;
+  --toast-blur: 2px;
+  --toast-scale: 0.97;
+  --toast-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Like button */
+  --like-color: #f40051;
+  --like-fill: 150ms;
+  --like-pop: 350ms;
+  --like-pop-ease: cubic-bezier(0.34, 1.96, 0.64, 1);
+  --like-particle-dur: 600ms;
+  --like-particle-dist: 20px;
+  --like-particle-size: 2.5px;
+  --like-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Learn more hover */
+  --learn-shift: 2px;
+  --learn-spread: 8deg;
+  --learn-in: 350ms;
+  --learn-out: 350ms;
+  --learn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Checkbox check */
+  --check-box: 150ms;
+  --check-draw: 350ms;
+  --check-delay: 0ms;
+  --check-uncheck: 150ms;
+  --check-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Spinning counter */
+  --reel-dur: 1400ms;
+  --reel-cell: 30px;
+  --reel-spin-blur: 3px;
+  --reel-stagger: 90ms;
+  --reel-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Toggle */
+  --toggle-dur: 350ms;
+  --toggle-travel: 14.66px;
+  --toggle-ov1: 1px;
+  --toggle-ov2: 0px;
+  --toggle-track: 0ms;
+  --toggle-ease: cubic-bezier(0.34, 1.35, 0.64, 1);
+  /* Thinking states */
+  --think-hold: 2000ms;
+  --think-swap: 150ms;
+  --think-gap: 50ms;
+  --think-distance: 8px;
+  --think-blur: 2px;
+  --think-shimmer: 2000ms;
+  --think-base: #7c7c7c;
+  --think-highlight: #0d0d0d;
+  --think-ease: ease-in-out;
+  /* Reasoning stream */
+  --reason-hold: 840ms;
+  --reason-step: 500ms;
+  --reason-lines: 2;
+  --reason-fade: 28px;
+  --reason-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Streaming text */
+  --stream-gap: 60ms;
+  --stream-fade: 350ms;
+  --stream-blur: 1px;
+  --stream-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Matrix dot loader */
+  --matrix-cycle: 1200ms;
+  --matrix-base: #d9d9d9;
+  --matrix-active: #85858f;
+  --matrix-ease: ease-in-out;
+  /* Banner stacking */
+  --stack-open: 350ms;
+  --stack-close: 250ms;
+  --stack-rise: 60px;
+  --stack-blur: 2px;
+  --stack-scale: 0.97;
+  --stack-peek: 12px;
+  --stack-spread-gap: 8px;
+  --stack-depth-scale: 0.06;
+  --stack-depth-fade: 0.4;
+  --stack-depth1-blur: 1px;
+  --stack-depth2-blur: 2px;
+  --stack-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ------------------------------------------------------------------
+   transitions.dev snippets, installed verbatim from the skill's
+   reference files. Each keeps its prefers-reduced-motion guard.
+   ------------------------------------------------------------------ */
+
+/* 02-number-pop-in.md — inventory quantities, confidence, latency. */
+@keyframes t-digit-pop-in {
+  0%   {
+    transform: translate(
+      calc(var(--digit-distance) * var(--digit-dir-x)),
+      calc(var(--digit-distance) * var(--digit-dir-y))
+    );
+    opacity: 0;
+    filter: blur(var(--digit-blur));
+  }
+  100% { transform: translate(0, 0); opacity: 1; filter: blur(0); }
+}
+
+.t-digit-group {
+  display: inline-flex;
+  align-items: baseline;
+}
+.t-digit {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+.t-digit-group.is-animating .t-digit {
+  animation: t-digit-pop-in var(--digit-dur) var(--digit-ease) both;
+}
+.t-digit-group.is-animating .t-digit[data-stagger="1"] {
+  animation-delay: var(--digit-stagger);
+}
+.t-digit-group.is-animating .t-digit[data-stagger="2"] {
+  animation-delay: calc(var(--digit-stagger) * 2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-digit-group .t-digit { animation: none !important; }
+}
+
+/* 04-text-states-swap.md — machine caption strips and the jev callout. */
+.t-text-swap {
+  display: inline-block;
+  transform: translateY(0);
+  filter: blur(0);
+  opacity: 1;
+  transition:
+    transform var(--text-swap-dur) var(--text-swap-ease),
+    filter    var(--text-swap-dur) var(--text-swap-ease),
+    opacity   var(--text-swap-dur) var(--text-swap-ease);
+  will-change: transform, filter, opacity;
+}
+.t-text-swap.is-exit {
+  transform: translateY(calc(var(--text-swap-translate-y) * -1));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+}
+.t-text-swap.is-enter-start {
+  transform: translateY(var(--text-swap-translate-y));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-text-swap { transition: none !important; }
+}
+
+/* 10-success-check.md — the check on a served order row. */
+.t-success-check {
+  display: inline-block;
+  transform-origin: center;
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+.t-success-check svg { display: block; overflow: visible; }
+.t-success-check svg path {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+}
+
+.t-success-check[data-state="in"] {
+  animation:
+    t-check-fade   var(--check-opacity-dur) var(--check-ease-opacity) forwards,
+    t-check-rotate var(--check-rotate-dur)  var(--check-ease-rotate)  forwards,
+    t-check-blur   var(--check-blur-dur)    var(--check-ease-out)     forwards,
+    t-check-bob    var(--check-bob-dur)     var(--check-ease-bob)     forwards;
+}
+.t-success-check[data-state="in"] svg path {
+  animation: t-check-draw var(--check-path-dur) var(--check-ease-path) var(--check-path-delay, 0ms) forwards;
+}
+
+@keyframes t-check-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes t-check-rotate {
+  from { transform: rotate(var(--check-rotate-from)); }
+  to   { transform: rotate(0deg); }
+}
+@keyframes t-check-blur {
+  from { filter: blur(var(--check-blur-from)); }
+  to   { filter: blur(0); }
+}
+@keyframes t-check-bob {
+  from { translate: 0 var(--check-y-amount); }
+  to   { translate: 0 0; }
+}
+@keyframes t-check-draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .t-success-check { animation: none !important; opacity: 1; }
+  .t-success-check svg path { animation: none !important; stroke-dashoffset: 0 !important; }
+}
+
+/* 16-tabs-sliding.md — the 1× / 5× / 10× speed control. */
+.t-tabs {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 48px;
+  background: var(--tabs-bar-bg);
+}
+.t-tab {
+  position: relative;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  height: 30px;
+  padding: 4px 12px;
+  color: var(--tabs-text-muted);
+  cursor: pointer;
+  border-radius: 48px;
+  z-index: 1;
+  transition: color var(--tabs-dur) var(--tabs-ease);
+}
+.t-tab:not([aria-selected="true"]):hover,
+.t-tab[aria-selected="true"] {
+  color: var(--tabs-text-active);
+}
+
+.t-tabs-pill {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  height: 30px;
+  width: 0;
+  background: var(--tabs-pill-bg);
+  border-radius: 48px;
+  transform: translateX(0);
+  transition:
+    transform var(--tabs-dur) var(--tabs-ease),
+    width     var(--tabs-dur) var(--tabs-ease);
+  will-change: transform, width;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-tabs-pill, .t-tab { transition: none !important; }
+}
+
+/* 21-accordion.md — the Chaos section and the decision-history toggle. */
+.t-acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--acc-collapse) var(--acc-ease);
+}
+.t-acc[data-open="true"] .t-acc-panel {
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--acc-expand) var(--acc-ease);
+}
+.t-acc-panel-inner {
+  overflow: hidden;
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity var(--acc-collapse) var(--acc-ease),
+    filter var(--acc-collapse) var(--acc-ease);
+}
+.t-acc[data-open="true"] .t-acc-panel-inner {
+  opacity: 1;
+  filter: blur(0);
+  transition:
+    opacity var(--acc-expand) var(--acc-ease),
+    filter var(--acc-expand) var(--acc-ease);
+}
+.t-acc-chevron {
+  display: inline-flex;
+  transform: scaleY(1);
+  transform-origin: center;
+  transition: transform var(--acc-chevron) var(--acc-ease);
+}
+.t-acc-chevron path { vector-effect: non-scaling-stroke; }
+.t-acc[data-open="true"] .t-acc-chevron {
+  transform: scaleY(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-acc-panel, .t-acc-panel-inner, .t-acc-chevron {
+    transition: none !important;
+  }
+}
+
+/* 22-toast.md — a new order row rising into the queue. */
+.t-toast {
+  opacity: 0;
+  transform: translateY(var(--toast-distance)) scale(var(--toast-scale));
+  filter: blur(var(--toast-blur));
+  will-change: transform, opacity, filter;
+  transition:
+    opacity var(--toast-close) var(--toast-ease),
+    transform var(--toast-close) var(--toast-ease),
+    filter var(--toast-close) var(--toast-ease);
+}
+.t-toast.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  transition:
+    opacity var(--toast-open) var(--toast-ease),
+    transform var(--toast-open) var(--toast-ease),
+    filter var(--toast-open) var(--toast-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-toast { transition: none !important; }
+}
+
+/* ------------------------------------------------------------------
+   SVG-native motion. Every value is a motion token; nothing loops
+   unless the machine says that state is actually active.
+   ------------------------------------------------------------------ */
+
+
+/* Falling grounds: a dotted trickle that drips down. */
+@keyframes m-drip { to { stroke-dashoffset: -16; } }
+@keyframes m-stream-in { from { opacity: 0; } to { opacity: 1; } }
+.m-stream {
+  animation:
+    m-stream-in var(--duration-fast) var(--ease-smooth-out) both,
+    m-drip 900ms var(--ease-linear) infinite;
+}
+
+/* A liquid pour: drawn down from the spout, then a gentle sway, with a
+   highlight flowing down it. */
+@keyframes m-pour { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.m-pour { stroke-dasharray: 1; animation: m-pour 240ms var(--ease-smooth-out) both; }
+@keyframes m-sway { from { transform: skewX(-2.5deg); } to { transform: skewX(2.5deg); } }
+.m-sway { transform-box: fill-box; transform-origin: top center; animation: m-sway 700ms var(--ease-in-out) infinite alternate; }
+@keyframes m-flow { to { stroke-dashoffset: -42; } }
+.m-flow { animation: m-flow 520ms linear infinite; }
+
+/* Grinder dial jitter while grinding. */
+@keyframes m-jitter {
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
+}
+.m-jitter { animation: m-jitter var(--duration-quick) var(--ease-in-out) infinite; }
+
+/* A traced outline of a part at work breathes gently. */
+@keyframes m-breathe { from { opacity: 1; } to { opacity: 0.55; } }
+.m-breathe { animation: m-breathe 900ms var(--ease-in-out) infinite alternate; }
+
+/* A cup slides in under the spouts. (Once served, it flies to its order card in a view transition.) */
+@keyframes m-cup-in { from { opacity: 0; transform: translateX(90px); } }
+.m-cup-in { animation: m-cup-in 450ms var(--ease-smooth-out) both; }
+
+/* The tamper: in from above, down onto the grounds, a firm hold, back up and out.
+   Its duration is set inline to the tamp step's. */
+@keyframes m-tamp {
+  0% { opacity: 0; transform: translateY(-80px); }
+  18% { opacity: 1; transform: translateY(-56px); }
+  45%, 62% { opacity: 1; transform: translateY(0); }
+  84% { opacity: 1; transform: translateY(-56px); }
+  100% { opacity: 0; transform: translateY(-80px); }
+}
+.m-tamp { animation: m-tamp 1200ms var(--ease-in-out) both; }
+
+/* Steam off the jug (and smoke off a broken part): soft blurred puffs that
+   rise, swell and thin out, staggered. */
+@keyframes m-steam {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
+  20% { opacity: 0.55; }
+  100% { opacity: 0; transform: translate(-16px, -150px) scale(1.9); }
+}
+.m-steam { transform-box: fill-box; transform-origin: center; opacity: 0; animation: m-steam 1800ms var(--ease-smooth-out) infinite; }
+.m-steam[data-i="1"] { animation-delay: 360ms; }
+.m-steam[data-i="2"] { animation-delay: 720ms; }
+.m-steam[data-i="3"] { animation-delay: 1080ms; }
+.m-steam[data-i="4"] { animation-delay: 1440ms; }
+.m-smoke { animation-duration: 2800ms; }
+
+/* The group head purges: a short spray of water before the portafilter locks in. */
+@keyframes m-purge {
+  0% { opacity: 0; transform: translateY(-8px); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(30px); }
+}
+.m-purge { animation: m-purge 520ms var(--ease-smooth-out) both; }
+
+/* The knock box slides in from the left, and back out to the left. */
+@keyframes m-from-left { from { opacity: 0; transform: translateX(-420px); } }
+@keyframes m-to-left { to { opacity: 0; transform: translateX(-420px); } }
+.m-from-left { animation: m-from-left 380ms var(--ease-smooth-out) both; }
+.m-to-left { animation: m-to-left 380ms var(--ease-smooth-out) both; }
+
+/* The spent puck drops out of the tipped basket into the knock box. */
+@keyframes m-puck {
+  0%, 42% { opacity: 0; transform: translateY(-18px); }
+  46% { opacity: 1; transform: translateY(-18px); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.4); }
+  88%, 100% { opacity: 1; transform: translateY(56px); }
+}
+.m-puck { animation: m-puck 1200ms linear both; }
+
+/* Tamping: the cone of grounds squashes as the tamper lands (its keyframes
+   match m-tamp's) and hands over to the flat puck. Durations set inline. */
+@keyframes m-flatten {
+  0%, 28% { transform: scaleY(1); opacity: 1; }
+  45% { transform: scaleY(0.2); opacity: 1; }
+  46%, 100% { transform: scaleY(0.2); opacity: 0; }
+}
+.m-flatten { animation: m-flatten 1200ms var(--ease-in-out) both; }
+@keyframes m-pressed { 0%, 45% { opacity: 0; } 46%, 100% { opacity: 1; } }
+.m-pressed { animation: m-pressed 1200ms linear both; }
+
+/* A broken part jolts now and then; sparks flicker at the crack. */
+@keyframes m-jolt {
+  0%, 12%, 100% { transform: none; }
+  2% { transform: translate(-3px, 1px) rotate(-0.6deg); }
+  5% { transform: translate(3px, -1px) rotate(0.6deg); }
+  8% { transform: translate(-2px, 0) rotate(-0.3deg); }
+}
+.m-jolt { transform-box: fill-box; transform-origin: center bottom; animation: m-jolt 3200ms linear infinite; }
+@keyframes m-spark { 0%, 40%, 100% { opacity: 0; } 45%, 55% { opacity: 1; } }
+.m-spark { animation: m-spark 1100ms steps(1) infinite; }
+.m-spark[data-i="1"] { animation-delay: 420ms; }
+
+/* The wrench works back and forth while a part is repaired. */
+@keyframes m-wrench { 0%, 100% { transform: rotate(-22deg); } 50% { transform: rotate(18deg); } }
+.m-wrench { transform-box: fill-box; transform-origin: center; animation: m-wrench 700ms var(--ease-in-out) infinite; }
+
+/* The chocolate bottle comes in over the cup, tilted, and leaves again. */
+@keyframes m-bottle-in { from { opacity: 0; transform: translate(24px, -30px); } }
+@keyframes m-bottle-out { to { opacity: 0; transform: translate(24px, -30px); } }
+.m-bottle-in { animation: m-bottle-in 320ms var(--ease-smooth-out) both; }
+.m-bottle-out { animation: m-bottle-out 320ms var(--ease-smooth-out) both; }
+
+/* A declined drink's cup shakes, shows its ✕ and fades; its card shakes. */
+@keyframes m-shake {
+  0%, 100% { transform: none; }
+  15% { transform: translateX(-6px); }
+  35% { transform: translateX(6px); }
+  55% { transform: translateX(-4px); }
+  75% { transform: translateX(3px); }
+}
+@keyframes m-decline { 0%, 55% { opacity: 1; } 100% { opacity: 0; } }
+.m-shake { animation: m-shake 420ms var(--ease-in-out) both; }
+.m-decline { animation: m-shake 420ms var(--ease-in-out), m-decline 700ms linear both; }
+
+/* A knob in use glows; the pressure needle trembles while a shot pulls. */
+@keyframes m-glow { from { opacity: 0.18; } to { opacity: 0.45; } }
+.m-glow { animation: m-glow 900ms var(--ease-in-out) infinite alternate; }
+@keyframes m-needle { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+.m-needle { animation: m-needle 380ms var(--ease-in-out) infinite alternate; }
+
+/* Crack stroke-draws when a device breaks. */
+@keyframes m-crack-draw { to { stroke-dashoffset: 0; } }
+.m-crack {
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: m-crack-draw var(--duration-very-slow) var(--ease-smooth-out) forwards;
+}
+
+/* Levels that tween: hopper beans, cup fill. */
+.m-level { transition: transform var(--duration-slow) var(--ease-smooth-out); }
+
+/* Progress-ring arc: the `d` is recomputed each tick. The ring itself gets
+   NO appear transition — short steps (~1s) would spend their whole life
+   fading in, so it simply shows and hides with the state. */
+
+/* A served order row settling into its muted treatment. */
+.m-settle {
+  transition:
+    opacity var(--duration-medium) var(--ease-smooth-out),
+    border-color var(--duration-medium) var(--ease-smooth-out),
+    background-color var(--duration-medium) var(--ease-smooth-out);
+}
+
+/* Inventory + probability bars glide rather than jump. */
+.m-bar { transition: width var(--duration-slow) var(--ease-smooth-out); }
+
+@media (prefers-reduced-motion: reduce) {
+  .m-breathe, .m-pour, .m-sway, .m-flow, .m-cup-in, .m-tamp, .m-steam, .m-purge, .m-from-left, .m-to-left, .m-puck, .m-jolt, .m-spark, .m-wrench, .m-bottle-in, .m-bottle-out, .m-shake, .m-decline, .m-flatten, .m-pressed, .m-stream, .m-jitter, .m-crack, .m-needle, .m-glow {
+    animation: none !important;
+  }
+  .m-crack { stroke-dashoffset: 0 !important; }
+  .m-level, .m-settle, .m-bar { transition: none !important; }
+}
+
+/* ------------------------------------------------------------------
+   Palette-bound token overrides for this app's dark surface.
+   ------------------------------------------------------------------ */
+:root {
+  --think-base: #a8a49c;
+  --think-highlight: #faf9f5;
+  --tabs-bar-bg: #1d1d1b;
+  --tabs-pill-bg: #2a1d17;
+  --tabs-text-muted: #a8a49c;
+  --tabs-text-active: #f6c9b3;
+  --toast-distance: 8px;
+}
+

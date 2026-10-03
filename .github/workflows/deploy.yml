@@ -1,0 +1,37 @@
+# Every push to main is tested, built and deployed to Cloudflare Workers
+# (https://jevspresso.davidkpiano.workers.dev).
+#
+# Needs one repository secret, CLOUDFLARE_API_TOKEN: a Cloudflare API token
+# with the "Edit Cloudflare Workers" template. The account is set in
+# wrangler.jsonc. The worker has no TYPESAFE_API_KEY: visitors give their own.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # The build generates src/routeTree.gen.ts (git-ignored), which the typecheck needs.
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm exec wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

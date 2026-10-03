@@ -1,0 +1,16 @@
+allowBuilds:
+  esbuild: true
+  workerd: true
+minimumReleaseAgeExclude:
+  - '@cloudflare/vite-plugin@1.55.0'
+  - '@cloudflare/workerd-darwin-64@1.20260917.1'
+  - '@cloudflare/workerd-darwin-arm64@1.20260917.1'
+  - '@cloudflare/workerd-linux-64@1.20260917.1'
+  - '@cloudflare/workerd-linux-arm64@1.20260917.1'
+  - '@cloudflare/workerd-windows-64@1.20260917.1'
+  - miniflare@5.20260917.0-alpha
+  - workerd@1.20260917.1
+  - xstate@6.0.0-alpha.58
+  - wrangler@4.134.0
+packages:
+  - packages/*
