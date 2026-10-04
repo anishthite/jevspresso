@@ -11,7 +11,7 @@ import { TypeSafeClient } from '@typesafe-ai/sdk';
 import type { JevClient, JevRequest, JevResponse } from '@xstate/jev';
 import { baristaQuestions } from './barista';
 import { answersToParsedOrder, buildParseQuestions, type Answers } from './jev-core';
-import { userKey } from './key';
+import { userKey, type UserKey } from './key';
 import { logged } from './jevLog';
 import type { BarSnapshot, ParsedOrder } from './types';
 
@@ -23,11 +23,11 @@ export const jevAvailable = createServerFn({ method: 'GET' }).handler(async () =
 let envClient: TypeSafeClient | null = null;
 
 /** Send Jev's native decision request through OpenRouter. */
-export async function askOpenRouter(state: unknown, questions: Record<string, unknown>): Promise<Answers> {
+export async function askOpenRouter(state: unknown, questions: Record<string, unknown>, apiKey = process.env.OPENROUTER_API_KEY): Promise<Answers> {
   const response = await fetch('https://openrouter.ai/api/alpha/decisions', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
       'X-Title': 'Jevspresso',
     },
@@ -41,12 +41,14 @@ export async function askOpenRouter(state: unknown, questions: Record<string, un
 }
 
 /** The server's TypeSafe key takes precedence; OpenRouter is an optional server-side fallback. */
-async function ask(apiKey: string | undefined, state: unknown, questions: Record<string, unknown>): Promise<Answers> {
-  if (!process.env.TYPESAFE_API_KEY && process.env.OPENROUTER_API_KEY) return askOpenRouter(state, questions);
+async function ask(apiKey: UserKey | undefined, state: unknown, questions: Record<string, unknown>): Promise<Answers> {
+  if (!process.env.TYPESAFE_API_KEY && (process.env.OPENROUTER_API_KEY || apiKey?.provider === 'openrouter')) {
+    return askOpenRouter(state, questions, process.env.OPENROUTER_API_KEY || apiKey?.key);
+  }
   const client = process.env.TYPESAFE_API_KEY
     ? (envClient ??= new TypeSafeClient({ timeout: 30_000 }))
-    : apiKey
-      ? new TypeSafeClient({ apiKey, timeout: 30_000 })
+    : apiKey?.provider === 'typesafe'
+      ? new TypeSafeClient({ apiKey: apiKey.key, timeout: 30_000 })
       : null;
   if (!client) throw new Error('No Jev key: set TYPESAFE_API_KEY or OPENROUTER_API_KEY, or give one on the page.');
   // The SDK's question types are structurally identical to what we build here;
@@ -56,7 +58,7 @@ async function ask(apiKey: string | undefined, state: unknown, questions: Record
 }
 
 const parseOrderFn = createServerFn({ method: 'POST' })
-  .validator((input: { text: string; apiKey?: string }) => input)
+  .validator((input: { text: string; apiKey?: UserKey }) => input)
   .handler(async ({ data: { text, apiKey } }): Promise<ParsedOrder> => {
     const started = Date.now();
     const answers = await ask(
@@ -76,7 +78,7 @@ export function parseOrder(text: string): Promise<ParsedOrder> {
 type AgentKind = 'barista' | 'router';
 
 const askJev = createServerFn({ method: 'POST' })
-  .validator((input: { request: JevRequest; apiKey?: string }) => input)
+  .validator((input: { request: JevRequest; apiKey?: UserKey }) => input)
   .handler(async ({ data: { request, apiKey } }): Promise<JevResponse> => {
     return { answers: (await ask(apiKey, request.state, request.questions)) as JevResponse['answers'] };
   });

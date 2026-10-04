@@ -20,7 +20,7 @@ cp .env.template .env   # set TYPESAFE_API_KEY or OPENROUTER_API_KEY
 pnpm dev                # http://localhost:3000
 ```
 
-Set `TYPESAFE_API_KEY` for TypeSafe's SDK, or `OPENROUTER_API_KEY` to use OpenRouter's `~typesafe/jev-latest` decision model (override with `JEV_MODEL`). TypeSafe takes precedence if both are set. Without a server key, the page asks for a TypeSafe key. `pnpm test` runs without a key, against a mock Jev.
+Set `TYPESAFE_API_KEY` for TypeSafe's SDK, or `OPENROUTER_API_KEY` to use OpenRouter's `~typesafe/jev-latest` decision model (override with `JEV_MODEL`). TypeSafe takes precedence if both are set. Without a server key, the page lets each visitor paste either provider's key in their browser. `pnpm test` runs without a key, against a mock Jev.
 
 ## XState + Jev in brief
 
